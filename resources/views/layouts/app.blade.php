@@ -40,6 +40,9 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
 
     <!-- endbuild -->
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css') }}" />
+    <link rel="stylesheet"
+        href="{{ asset('assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css') }}" />
 
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/apex-charts/apex-charts.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/swiper/swiper.css') }}" />
@@ -52,7 +55,7 @@
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
 
     <!--? Template customizer: To hide customizer set displayCustomizer value false in config.js. -->
-    <script src="{{ asset('assets/vendor/js/template-customizer.js') }}"></script>
+    {{-- <script src="{{ asset('assets/vendor/js/template-customizer.js') }}"></script> --}}
 
     <!--? Config: Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file. -->
 
@@ -72,10 +75,45 @@
                 <!-- Navbar -->
                 @include('layouts.partials.navbar')
                 <!-- / Navbar -->
+                <div class="content-wrapper">
 
-                <!-- Content wrapper -->
-                @yield('content')
-                <!-- Content wrapper -->
+                    <!-- Content wrapper -->
+                    @yield('content')
+                    <!-- Content wrapper -->
+
+                    <!-- Footer -->
+                    <footer class="content-footer footer bg-footer-theme">
+                        <div class="container-xxl">
+                            <div
+                                class="footer-container d-flex align-items-center justify-content-between py-4 flex-md-row flex-column">
+                                <div class="mb-2 mb-md-0">
+                                    &#169;
+                                    <script>
+                                        document.write(new Date().getFullYear());
+                                    </script>
+                                    , made with ❤️ by
+                                    <a href="https://pixinvent.com" target="_blank"
+                                        class="footer-link fw-medium">Pixinvent</a>
+                                </div>
+                                <div class="d-none d-lg-inline-block">
+                                    <a href="https://themeforest.net/licenses/standard" class="footer-link me-4"
+                                        target="_blank">License</a>
+
+                                    <a href="https://themeforest.net/user/pixinvent/portfolio" target="_blank"
+                                        class="footer-link me-4">More Themes</a>
+                                    <a href="https://demos.pixinvent.com/materialize-html-admin-template/documentation/"
+                                        target="_blank" class="footer-link me-4">Documentation</a>
+
+                                    <a href="https://pixinvent.ticksy.com/" target="_blank"
+                                        class="footer-link d-none d-sm-inline-block">Support</a>
+                                </div>
+                            </div>
+                        </div>
+                    </footer>
+                    <!-- / Footer -->
+                    <div class="content-backdrop fade"></div>
+                </div>
+
             </div>
             <!-- / Layout page -->
         </div>
@@ -92,22 +130,20 @@
 
     <!-- build:js assets/vendor/js/theme.js  -->
 
-    <script src="{{ asset('assets/vendor/libs/jquery/jquery.js') }}"></script>
 
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.bootstrap5.js"></script>
+
+    <script src="{{ asset('assets/vendor/libs/jquery/jquery.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/popper/popper.js') }}"></script>
     <script src="{{ asset('assets/vendor/js/bootstrap.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/node-waves/node-waves.js') }}"></script>
-
     <script src="{{ asset('assets/vendor/libs/@algolia/autocomplete-js.js') }}"></script>
-
     <script src="{{ asset('assets/vendor/libs/pickr/pickr.js') }}"></script>
-
     <script src="{{ asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
-
     <script src="{{ asset('assets/vendor/libs/hammer/hammer.js') }}"></script>
-
     <script src="{{ asset('assets/vendor/libs/i18n/i18n.js') }}"></script>
-
     <script src="{{ asset('assets/vendor/js/menu.js') }}"></script>
 
     <!-- endbuild -->
@@ -115,13 +151,17 @@
     <!-- Vendors JS -->
     <script src="{{ asset('assets/vendor/libs/apex-charts/apexcharts.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/swiper/swiper.js') }}"></script>
-
+    <script src="{{ asset('assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
     <!-- Main JS -->
 
     <script src="{{ asset('assets/js/main.js') }}"></script>
 
     <!-- Page JS -->
     <script src="{{ asset('assets/js/dashboards-analytics.js') }}"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    @stack('scripts')
 </body>
 
 </html>

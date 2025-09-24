@@ -18,6 +18,7 @@ class PermissionSeeder extends Seeder
         Permission::create(['name' => 'view-all-tickets']);
         Permission::create(['name' => 'manage-users']);
         Permission::create(['name' => 'view-reports']);
+        Permission::create(['name' => 'view-activity-log']);
 
         // Cari Roles yang sudah ada
         $adminRole = Role::findByName('Admin');
