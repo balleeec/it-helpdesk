@@ -39,10 +39,10 @@ class GroupController extends Controller
                 $deleteUrl = route('admin.groups.destroy', $group->id);
 
                 // Tombol Edit
-                $editButton = '<a href="' . $editUrl . '" class="btn btn-sm btn-warning">Edit</a>';
+                $editButton = '<a href="' . $editUrl . '" class="btn btn-xs btn-warning">Edit</a>';
 
                 $deleteButton = '
-                <button type="button" class="btn btn-sm btn-danger delete-btn" data-url="' . $deleteUrl . '">Hapus</button>';
+                <button type="button" class="btn btn-xs btn-danger delete-btn" data-url="' . $deleteUrl . '">Hapus</button>';
 
                 return $editButton . ' ' . $deleteButton;
             })

@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Models\Group;
 use Illuminate\Http\Request;
-use Spatie\Activitylog\Models\Activity;
 use Yajra\DataTables\DataTables;
+use App\Http\Controllers\Controller;
+use Spatie\Activitylog\Models\Activity;
 
 class ActivityLogController extends Controller
 {
@@ -16,29 +17,60 @@ class ActivityLogController extends Controller
 
     public function data()
     {
-        // Ambil data log, eager load relasi causer (user) dan subject (model yg diubah)
         $activities = Activity::with(['causer', 'subject'])->latest();
 
         return DataTables::of($activities)
-            ->editColumn('description', function ($activity) {
-                return $activity->description;
+            ->addColumn('event', function ($activity) {
+                // ... (kode badge event tidak berubah)
+                $badgeColor = match ($activity->event) {
+                    'created' => 'success',
+                    'updated' => 'info',
+                    'deleted' => 'danger',
+                    default => 'secondary',
+                };
+                return '<span class="badge bg-' . $badgeColor . '">' . strtoupper($activity->event) . '</span>';
             })
-            ->editColumn('subject', function ($activity) {
-                // Tampilkan info model apa yang diubah
-                if ($activity->subject) {
-                    return class_basename($activity->subject) . ' (ID: ' . $activity->subject->id . ')';
+            ->addColumn('description_formatted', function ($activity) {
+                // ... (kode deskripsi tidak berubah)
+                $causer = $activity->causer->name ?? 'Sistem';
+                $subjectType = class_basename($activity->subject_type);
+                $subjectName = $activity->properties->get('attributes')['name'] ?? $activity->properties->get('old')['name'] ?? '(ID: ' . $activity->subject_id . ')';
+                return "<strong>{$causer}</strong> melakukan aksi '{$activity->event}' pada <strong>{$subjectType}</strong> '{$subjectName}'";
+            })
+            ->addColumn('detail', function ($activity) {
+                $properties = $activity->properties;
+                if ($properties->has('old') && $properties->has('attributes')) {
+
+                    // --- AWAL PERUBAHAN ---
+                    $oldProps = $properties->get('old', []);
+                    $newProps = $properties->get('attributes', []);
+
+                    // Ubah 'parent_id' menjadi nama grup di data LAMA
+                    if (isset($oldProps['parent_id'])) {
+                        $oldParent = Group::find($oldProps['parent_id']);
+                        $oldProps['Induk Grup'] = $oldParent ? $oldParent->name : 'Tidak Ada';
+                        unset($oldProps['parent_id']); // Hapus key parent_id
+                    }
+
+                    // Ubah 'parent_id' menjadi nama grup di data BARU
+                    if (isset($newProps['parent_id'])) {
+                        $newParent = Group::find($newProps['parent_id']);
+                        $newProps['Induk Grup'] = $newParent ? $newParent->name : 'Tidak Ada';
+                        unset($newProps['parent_id']); // Hapus key parent_id
+                    }
+
+                    $oldData = htmlspecialchars(json_encode($oldProps), ENT_QUOTES, 'UTF-8');
+                    $newData = htmlspecialchars(json_encode($newProps), ENT_QUOTES, 'UTF-8');
+                    // --- AKHIR PERUBAHAN ---
+
+                    return '<button class="btn btn-xs btn-primary btn-detail" data-old="' . $oldData . '" data-new="' . $newData . '">Lihat Detail</button>';
                 }
-                return 'N/A';
-            })
-            ->editColumn('causer', function ($activity) {
-                // Tampilkan nama user yang melakukan aksi
-                return $activity->causer->name ?? 'Sistem';
+                return '-';
             })
             ->editColumn('created_at', function ($activity) {
-                // Format tanggal
                 return $activity->created_at->format('d M Y, H:i');
             })
-            ->rawColumns([]) // Tidak ada kolom HTML
+            ->rawColumns(['event', 'description_formatted', 'detail'])
             ->make(true);
     }
 }
