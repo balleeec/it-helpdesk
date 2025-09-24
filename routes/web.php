@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\GroupController;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ActivityLogController;
 
 
@@ -14,9 +15,14 @@ Route::middleware(['auth', 'role:Admin'])->prefix('admin')->name('admin.')->grou
     // Route::get('users/data', [UserController::class, 'data'])->name('users.data');
     // Route::resource('users', UserController::class);
 
+    // Route untuk Groups
     Route::post('groups/bulk-delete', [GroupController::class, 'bulkDelete'])->name('groups.bulk-delete');
     Route::get('groups/data', [GroupController::class, 'data'])->name('groups.data');
     Route::resource('groups', GroupController::class);
+
+    // Route untuk Kategori
+    Route::get('categories/data', [CategoryController::class, 'data'])->name('categories.data');
+    Route::resource('categories', CategoryController::class);
 
     // Route untuk Activity Log
     Route::get('activity-log', [ActivityLogController::class, 'index'])->name('activity-log.index');

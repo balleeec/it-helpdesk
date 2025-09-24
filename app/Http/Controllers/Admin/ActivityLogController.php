@@ -41,27 +41,22 @@ class ActivityLogController extends Controller
                 $properties = $activity->properties;
                 if ($properties->has('old') && $properties->has('attributes')) {
 
-                    // --- AWAL PERUBAHAN ---
                     $oldProps = $properties->get('old', []);
                     $newProps = $properties->get('attributes', []);
 
-                    // Ubah 'parent_id' menjadi nama grup di data LAMA
+                    // Logika ini sekarang akan membaca properti yang Anda tambahkan dari model
                     if (isset($oldProps['parent_id'])) {
-                        $oldParent = Group::find($oldProps['parent_id']);
-                        $oldProps['Induk Grup'] = $oldParent ? $oldParent->name : 'Tidak Ada';
-                        unset($oldProps['parent_id']); // Hapus key parent_id
+                        $oldProps['Induk'] = $properties->get('old_parent_name') ?? 'Tidak Ada';
+                        unset($oldProps['parent_id']);
                     }
 
-                    // Ubah 'parent_id' menjadi nama grup di data BARU
                     if (isset($newProps['parent_id'])) {
-                        $newParent = Group::find($newProps['parent_id']);
-                        $newProps['Induk Grup'] = $newParent ? $newParent->name : 'Tidak Ada';
-                        unset($newProps['parent_id']); // Hapus key parent_id
+                        $newProps['Induk'] = $properties->get('new_parent_name') ?? 'Tidak Ada';
+                        unset($newProps['parent_id']);
                     }
 
                     $oldData = htmlspecialchars(json_encode($oldProps), ENT_QUOTES, 'UTF-8');
                     $newData = htmlspecialchars(json_encode($newProps), ENT_QUOTES, 'UTF-8');
-                    // --- AKHIR PERUBAHAN ---
 
                     return '<button class="btn btn-xs btn-primary btn-detail" data-old="' . $oldData . '" data-new="' . $newData . '">Lihat Detail</button>';
                 }

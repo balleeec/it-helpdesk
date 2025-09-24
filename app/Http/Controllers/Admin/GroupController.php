@@ -110,6 +110,12 @@ class GroupController extends Controller
      */
     public function destroy(Group $group)
     {
+        // CEK APAKAH GRUP INI PUNYA ANAK
+        if ($group->children()->count() > 0) {
+            return redirect()->route('admin.groups.index')
+                ->with('error', 'Grup tidak dapat dihapus karena memiliki anak grup.');
+        }
+
         $group->delete();
         return redirect()->route('admin.groups.index')->with('success', 'Grup berhasil dihapus.');
     }

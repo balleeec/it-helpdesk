@@ -164,6 +164,12 @@
                     <div>Manajemen Grup</div>
                 </a>
             </li>
+            <li class="menu-item {{ request()->routeIs('admin.categories.*') ? 'active' : '' }}">
+                <a href="{{ route('admin.categories.index') }}" class="menu-link">
+                    <i class="menu-icon icon-base ri ri-folder-2-line"></i>
+                    <div>Manajemen Kategori</div>
+                </a>
+            </li>
         @endcan
         @can('view-activity-log')
             <li class="menu-item {{ request()->routeIs('admin.activity-log.index') ? 'active' : '' }}">
