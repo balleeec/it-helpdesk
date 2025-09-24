@@ -174,11 +174,12 @@
                                     ids: ids
                                 },
                                 success: function(response) {
-                                    Swal.fire(
-                                        'Dihapus!',
-                                        response.success,
-                                        'success'
-                                    ).then(function() {
+                                    Swal.fire({
+                                        title: 'Proses Selesai',
+                                        text: response
+                                            .message, // Tampilkan pesan gabungan dari server
+                                        icon: 'info'
+                                    }).then(function() {
                                         table.ajax.reload();
                                         $('#select_all_ids').prop('checked',
                                             false);
@@ -186,9 +187,11 @@
                                     });
                                 },
                                 error: function(xhr) {
+                                    // Ambil pesan error spesifik dari respons JSON server
+                                    var errorMessage = xhr.responseJSON.error;
                                     Swal.fire(
-                                        'Error!',
-                                        'Terjadi kesalahan saat menghapus data.',
+                                        'Gagal!',
+                                        errorMessage, // Tampilkan pesan error dari server
                                         'error'
                                     );
                                 }

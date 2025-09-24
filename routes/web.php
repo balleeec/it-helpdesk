@@ -21,6 +21,7 @@ Route::middleware(['auth', 'role:Admin'])->prefix('admin')->name('admin.')->grou
     Route::resource('groups', GroupController::class);
 
     // Route untuk Kategori
+    Route::post('categories/bulk-delete', [CategoryController::class, 'bulkDelete'])->name('categories.bulk-delete');
     Route::get('categories/data', [CategoryController::class, 'data'])->name('categories.data');
     Route::resource('categories', CategoryController::class);
 

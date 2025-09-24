@@ -50,16 +50,6 @@ class GroupController extends Controller
             ->make(true);
     }
 
-    public function bulkDelete(Request $request)
-    {
-        $ids = $request->ids;
-        if (is_array($ids) && count($ids) > 0) {
-            Group::whereIn('id', $ids)->delete();
-            return response()->json(['success' => "Grup yang dipilih berhasil dihapus."]);
-        }
-        return response()->json(['error' => "Tidak ada grup yang dipilih."], 422);
-    }
-
     /**
      * Show the form for creating a new resource.
      */
@@ -118,5 +108,42 @@ class GroupController extends Controller
 
         $group->delete();
         return redirect()->route('admin.groups.index')->with('success', 'Grup berhasil dihapus.');
+    }
+
+    public function bulkDelete(Request $request)
+    {
+        $ids = collect($request->ids);
+        $successNames = [];
+        $errorNames = [];
+
+        if ($ids->isNotEmpty()) {
+            $groupsToDelete = Group::whereIn('id', $ids)->with(['children', 'users'])->get();
+
+            foreach ($groupsToDelete as $group) {
+                $childIds = $group->children->pluck('id');
+                $remainingChildren = $childIds->diff($ids);
+
+                // Jika grup aman untuk dihapus (tidak punya anak tersisa & tidak punya user)
+                if ($remainingChildren->isEmpty() && $group->users->isEmpty()) {
+                    $group->delete(); // Langsung hapus
+                    $successNames[] = $group->name;
+                } else {
+                    $errorNames[] = $group->name;
+                }
+            }
+
+            // Buat pesan respons dinamis
+            $message = '';
+            if (!empty($successNames)) {
+                $message .= 'Berhasil menghapus grup: ' . implode(', ', $successNames) . '. ';
+            }
+            if (!empty($errorNames)) {
+                $message .= 'Gagal menghapus grup (masih memiliki relasi): ' . implode(', ', $errorNames) . '.';
+            }
+
+            return response()->json(['success' => true, 'message' => trim($message)]);
+        }
+
+        return response()->json(['error' => "Tidak ada grup yang dipilih."], 422);
     }
 }
