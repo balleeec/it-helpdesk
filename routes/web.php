@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\GroupController;
 use App\Http\Controllers\Admin\CategoryController;
@@ -12,11 +13,20 @@ Route::get('/', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+// routes/web.php
+Route::get('/assets/{path}', function ($path) {
+    return response()->file(public_path("assets/{$path}"));
+})->where('path', '.*');
+
 Route::middleware(['auth', 'role:Admin'])->prefix('admin')->name('admin.')->group(function () {
     // Route untuk Users
     Route::post('users/bulk-delete', [UserController::class, 'bulkDelete'])->name('users.bulk-delete');
     Route::get('users/data', [UserController::class, 'data'])->name('users.data');
     Route::resource('users', UserController::class);
+
+    // Route untuk Role & Permission
+    Route::get('roles/data', [RoleController::class, 'data'])->name('roles.data');
+    Route::resource('roles', RoleController::class);
 
     // Route untuk Groups
     Route::post('groups/bulk-delete', [GroupController::class, 'bulkDelete'])->name('groups.bulk-delete');

@@ -57,17 +57,27 @@
     <div class="menu-inner-shadow"></div>
 
     <ul class="menu-inner py-1">
-        <li class="menu-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
-            <a href="{{ route('dashboard') }}" class="menu-link">
-                <i class="menu-icon icon-base ri ri-home-smile-line"></i>
-                <div>Dashboard</div>
-            </a>
-        </li>
-
-        <li class="menu-header small mt-5">
-            <span class="menu-header-text">Tiket</span>
-        </li>
-
+        @can('view-dashboard')
+            <li class="menu-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                <a href="{{ route('dashboard') }}" class="menu-link">
+                    <i class="menu-icon icon-base ri ri-home-smile-line"></i>
+                    <div>Dashboard</div>
+                </a>
+            </li>
+        @endcan
+        @canany(['create-ticket', 'view-own-tickets', 'view-assigned-tickets', 'view-all-tickets'])
+            <li class="menu-header small mt-5">
+                <span class="menu-header-text">Tiket</span>
+            </li>
+        @endcanany
+        @can('create-ticket')
+            <li class="menu-item">
+                <a href="#" class="menu-link">
+                    <i class="menu-icon icon-base ri ri-coupon-line"></i>
+                    <div>Buat Tiket Baru</div>
+                </a>
+            </li>
+        @endcan
         @can('view-own-tickets')
             <li class="menu-item">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -75,11 +85,6 @@
                     <div>Tiket Saya</div>
                 </a>
                 <ul class="menu-sub">
-                    <li class="menu-item">
-                        <a href="#" class="menu-link">
-                            <div>Buat Tiket Baru</div>
-                        </a>
-                    </li>
                     <li class="menu-item">
                         <a href="#" class="menu-link">
                             <div>Request</div>
@@ -136,34 +141,45 @@
             </li>
         @endcan
 
-        @can('manage-users')
+        @canany(['view-users', 'view-role-permission'])
             <li class="menu-header small mt-5">
                 <span class="menu-header-text">Manajemen</span>
             </li>
-            <li class="menu-item {{ request()->routeIs('admin.users.*') ? 'active open' : '' }}">
+        @endcanany
+
+        @canany(['view-users', 'view-role-permission'])
+            <li class="menu-item {{ request()->routeIs(['admin.users.*', 'admin.roles.*']) ? 'active open' : '' }}">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon icon-base ri ri-user-settings-line"></i>
                     <div>Manajemen User</div>
                 </a>
                 <ul class="menu-sub">
-                    <li class="menu-item {{ request()->routeIs('admin.users.index') ? 'active' : '' }}">
-                        <a href="{{ route('admin.users.index') }}" class="menu-link">
-                            <div>User</div>
-                        </a>
-                    </li>
-                    <li class="menu-item">
-                        <a href="#" class="menu-link">
-                            <div>Role & Permission</div>
-                        </a>
-                    </li>
+                    @can('view-users')
+                        <li class="menu-item {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.users.index') }}" class="menu-link">
+                                <div>User</div>
+                            </a>
+                        </li>
+                    @endcan
+                    @can('view-role-permission')
+                        <li class="menu-item {{ request()->routeIs('admin.roles.*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.roles.index') }}" class="menu-link">
+                                <div>Role & Permission</div>
+                            </a>
+                        </li>
+                    @endcan
                 </ul>
             </li>
+        @endcanany
+        @can('view-group')
             <li class="menu-item {{ request()->routeIs('admin.groups.*') ? 'active' : '' }}">
                 <a href="{{ route('admin.groups.index') }}" class="menu-link">
                     <i class="menu-icon icon-base ri ri-group-2-line"></i>
                     <div>Manajemen Grup</div>
                 </a>
             </li>
+        @endcan
+        @can('view-category')
             <li class="menu-item {{ request()->routeIs('admin.categories.*') ? 'active' : '' }}">
                 <a href="{{ route('admin.categories.index') }}" class="menu-link">
                     <i class="menu-icon icon-base ri ri-folder-2-line"></i>
@@ -171,6 +187,7 @@
                 </a>
             </li>
         @endcan
+
         @can('view-activity-log')
             <li class="menu-item {{ request()->routeIs('admin.activity-log.index') ? 'active' : '' }}">
                 <a href="{{ route('admin.activity-log.index') }}" class="menu-link">

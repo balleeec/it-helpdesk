@@ -28,8 +28,8 @@ class CategoryController extends Controller
             ->addColumn('action', function ($category) {
                 $editUrl = route('admin.categories.edit', $category->id);
                 $deleteUrl = route('admin.categories.destroy', $category->id);
-                $editButton = '<a href="' . $editUrl . '" class="btn btn-sm btn-warning">Edit</a>';
-                $deleteButton = '<button type="button" class="btn btn-sm btn-danger delete-btn" data-url="' . $deleteUrl . '">Hapus</button>';
+                $editButton = '<a href="' . $editUrl . '" class="btn btn-xs btn-warning">Edit</a>';
+                $deleteButton = '<button type="button" class="btn btn-xs btn-danger delete-btn" data-url="' . $deleteUrl . '">Hapus</button>';
                 return $editButton . ' ' . $deleteButton;
             })
             // BARU: Memberitahu Yajra kolom checkbox juga berisi HTML

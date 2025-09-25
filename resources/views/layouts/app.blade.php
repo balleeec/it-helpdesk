@@ -1,7 +1,7 @@
 <!doctype html>
 
 <html lang="en" class="layout-navbar-fixed layout-menu-fixed layout-compact" dir="ltr" data-skin="default"
-    data-bs-theme="light" data-assets-path="../../assets/" data-template="vertical-menu-template">
+    data-bs-theme="light" data-assets-path="/assets/" data-template="vertical-menu-template">
 
 <head>
     <meta charset="utf-8" />

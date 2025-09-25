@@ -37,11 +37,11 @@ class UserController extends Controller
             ->addColumn('group', fn($user) => $user->group->name ?? '-')
             ->addColumn('action', function ($user) use ($auth) { // Tambahkan use ($auth)
                 $editUrl = route('admin.users.edit', $user->id);
-                $editButton = '<a href="' . $editUrl . '" class="btn btn-sm btn-warning">Edit</a>';
+                $editButton = '<a href="' . $editUrl . '" class="btn btn-xs btn-warning">Edit</a>';
 
                 // Perbaikan: $auth->id !== $user->id (bukan $users->id)
                 if ($auth->id !== $user->id) {
-                    $deleteButton = '<button type="button" class="btn btn-sm btn-danger delete-btn" data-url="' . route('admin.users.destroy', $user->id) . '">Hapus</button>';
+                    $deleteButton = '<button type="button" class="btn btn-xs btn-danger delete-btn" data-url="' . route('admin.users.destroy', $user->id) . '">Hapus</button>';
                     return $editButton . ' ' . $deleteButton;
                 }
 
