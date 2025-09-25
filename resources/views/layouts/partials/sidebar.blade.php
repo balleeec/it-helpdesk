@@ -140,14 +140,14 @@
             <li class="menu-header small mt-5">
                 <span class="menu-header-text">Manajemen</span>
             </li>
-            <li class="menu-item">
+            <li class="menu-item {{ request()->routeIs('admin.users.*') ? 'active open' : '' }}">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon icon-base ri ri-user-settings-line"></i>
                     <div>Manajemen User</div>
                 </a>
                 <ul class="menu-sub">
-                    <li class="menu-item">
-                        <a href="#" class="menu-link">
+                    <li class="menu-item {{ request()->routeIs('admin.users.index') ? 'active' : '' }}">
+                        <a href="{{ route('admin.users.index') }}" class="menu-link">
                             <div>User</div>
                         </a>
                     </li>

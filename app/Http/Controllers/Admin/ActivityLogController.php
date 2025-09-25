@@ -44,15 +44,17 @@ class ActivityLogController extends Controller
                     $oldProps = $properties->get('old', []);
                     $newProps = $properties->get('attributes', []);
 
-                    // Logika ini sekarang akan membaca properti yang Anda tambahkan dari model
-                    if (isset($oldProps['parent_id'])) {
+                    if (array_key_exists('parent_id', $newProps) || array_key_exists('parent_id', $oldProps)) {
                         $oldProps['Induk'] = $properties->get('old_parent_name') ?? 'Tidak Ada';
-                        unset($oldProps['parent_id']);
+                        $newProps['Induk'] = $properties->get('new_parent_name') ?? 'Tidak Ada';
+                        unset($oldProps['parent_id'], $newProps['parent_id']);
                     }
 
-                    if (isset($newProps['parent_id'])) {
-                        $newProps['Induk'] = $properties->get('new_parent_name') ?? 'Tidak Ada';
-                        unset($newProps['parent_id']);
+                    // Logika untuk group_id (User)
+                    if (array_key_exists('group_id', $newProps) || array_key_exists('group_id', $oldProps)) {
+                        $oldProps['Grup'] = $properties->get('old_group_name') ?? 'Tidak Ada';
+                        $newProps['Grup'] = $properties->get('new_group_name') ?? 'Tidak Ada';
+                        unset($oldProps['group_id'], $newProps['group_id']);
                     }
 
                     $oldData = htmlspecialchars(json_encode($oldProps), ENT_QUOTES, 'UTF-8');

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\GroupController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ActivityLogController;
@@ -12,8 +13,10 @@ Route::get('/', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware(['auth', 'role:Admin'])->prefix('admin')->name('admin.')->group(function () {
-    // Route::get('users/data', [UserController::class, 'data'])->name('users.data');
-    // Route::resource('users', UserController::class);
+    // Route untuk Users
+    Route::post('users/bulk-delete', [UserController::class, 'bulkDelete'])->name('users.bulk-delete');
+    Route::get('users/data', [UserController::class, 'data'])->name('users.data');
+    Route::resource('users', UserController::class);
 
     // Route untuk Groups
     Route::post('groups/bulk-delete', [GroupController::class, 'bulkDelete'])->name('groups.bulk-delete');

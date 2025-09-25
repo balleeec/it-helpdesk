@@ -50,7 +50,13 @@
                     <div class="card-body mt-1">
                         <h4 class="mb-1">Selamat Datang! 👋</h4>
                         <p class="mb-5">Silakan login untuk melaporkan isu atau melihat status tiket Anda.</p>
-
+                        @if ($errors->any())
+                            <div class="alert alert-danger mb-4" role="alert">
+                                <div class="alert-body">
+                                    {{ $errors->first() }}
+                                </div>
+                            </div>
+                        @endif
                         <form id="formAuthentication" class="mb-5" action="{{ route('login') }}" method="POST">
                             @csrf
                             <div class="form-floating form-floating-outline mb-5 form-control-validation">
